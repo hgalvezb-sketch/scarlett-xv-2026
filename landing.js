@@ -1,12 +1,15 @@
-export const APPS_SCRIPT_EXEC_URL = 'https://script.google.com/macros/s/AKfycbxEap7RJgkSd2prm1qCkzZGyRf4x-vaq30sJJ5aguqvhUPz1JD0A3IxyHZJm1By9i6f/exec';
-
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const DEPLOYMENT_ID_PATTERN = /^[A-Za-z0-9_-]{20,128}$/;
 
 export function isCanonicalUuid(value) {
   return typeof value === 'string' && UUID_PATTERN.test(value);
 }
 
-export function getInvitationToken(pageUrl) {
+export function isValidDeploymentId(value) {
+  return typeof value === 'string' && DEPLOYMENT_ID_PATTERN.test(value);
+}
+
+export function getInvitationParameters(pageUrl) {
   let url;
 
   try {
@@ -15,39 +18,37 @@ export function getInvitationToken(pageUrl) {
     return null;
   }
 
-  const tokenValues = url.searchParams.getAll('token');
-  if (tokenValues.length !== 1 || !isCanonicalUuid(tokenValues[0])) {
+  if (url.searchParams.size !== 2) {
     return null;
   }
 
-  return tokenValues[0];
+  const deploymentIdValues = url.searchParams.getAll('app');
+  const tokenValues = url.searchParams.getAll('token');
+  if (
+    deploymentIdValues.length !== 1
+    || tokenValues.length !== 1
+    || !isValidDeploymentId(deploymentIdValues[0])
+    || !isCanonicalUuid(tokenValues[0])
+  ) {
+    return null;
+  }
+
+  return {
+    deploymentId: deploymentIdValues[0],
+    token: tokenValues[0],
+  };
 }
 
-export function buildAppsScriptUrl(destination, token) {
-  if (destination === '__APPS_SCRIPT_EXEC_URL__') {
-    throw new Error('La URL de Apps Script todavía no está configurada.');
+export function buildAppsScriptUrl(deploymentId, token) {
+  if (!isValidDeploymentId(deploymentId)) {
+    throw new TypeError('El deployment ID de Apps Script no es válido.');
   }
 
   if (!isCanonicalUuid(token)) {
     throw new TypeError('El token debe ser un UUID canónico.');
   }
 
-  let url;
-
-  try {
-    url = new URL(destination);
-  } catch {
-    throw new TypeError('La URL de destino debe usar HTTPS.');
-  }
-
-  if (url.protocol !== 'https:' || url.hostname !== 'script.google.com') {
-    throw new TypeError('La URL de destino debe usar HTTPS y pertenecer a Apps Script.');
-  }
-
-  url.search = '';
-  url.hash = '';
-  url.searchParams.set('token', token);
-  return url.toString();
+  return `https://script.google.com/macros/s/${deploymentId}/exec?token=${encodeURIComponent(token)}`;
 }
 
 function updateStatus(documentObject, state, title, message) {
@@ -67,11 +68,10 @@ function updateStatus(documentObject, state, title, message) {
 export function startLanding(
   documentObject,
   locationObject,
-  appsScriptExecUrl = APPS_SCRIPT_EXEC_URL,
 ) {
-  const token = getInvitationToken(locationObject.href);
+  const invitationParameters = getInvitationParameters(locationObject.href);
 
-  if (!token) {
+  if (!invitationParameters) {
     updateStatus(
       documentObject,
       'invalid',
@@ -84,7 +84,10 @@ export function startLanding(
   let destination;
 
   try {
-    destination = buildAppsScriptUrl(appsScriptExecUrl, token);
+    destination = buildAppsScriptUrl(
+      invitationParameters.deploymentId,
+      invitationParameters.token,
+    );
   } catch {
     updateStatus(
       documentObject,
