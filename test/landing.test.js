@@ -3,15 +3,16 @@ import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
 import {
-  APPS_SCRIPT_EXEC_URL,
   buildAppsScriptUrl,
-  getInvitationToken,
+  getInvitationParameters,
+  isValidDeploymentId,
   isCanonicalUuid,
   startLanding,
 } from '../landing.js';
 
 const projectRoot = new URL('../', import.meta.url);
 const validToken = '123e4567-e89b-42d3-a456-426614174000';
+const validDeploymentId = 'AKfycbw0123456789_-PortableAccountDeployment1234567890';
 
 async function readProjectFile(relativePath) {
   return readFile(new URL(relativePath, projectRoot), 'utf8');
@@ -22,39 +23,79 @@ test('accepts canonical UUID tokens without altering their value', () => {
 
   assert.equal(isCanonicalUuid(validToken), true);
   assert.equal(isCanonicalUuid(uppercaseToken), true);
-  assert.equal(getInvitationToken(`https://example.test/?token=${uppercaseToken}`), uppercaseToken);
+  assert.deepEqual(
+    getInvitationParameters(
+      `https://example.test/?app=${validDeploymentId}&token=${uppercaseToken}`,
+    ),
+    { deploymentId: validDeploymentId, token: uppercaseToken },
+  );
 });
 
-test('rejects malformed, missing, duplicated, and non-canonical tokens', () => {
+test('accepts only deployment IDs made of safe URL characters and a reasonable length', () => {
+  assert.equal(isValidDeploymentId(validDeploymentId), true);
+  assert.equal(isValidDeploymentId('a'.repeat(20)), true);
+  assert.equal(isValidDeploymentId('Z_-' + '9'.repeat(125)), true);
+  assert.equal(isValidDeploymentId('a'.repeat(19)), false);
+  assert.equal(isValidDeploymentId('a'.repeat(129)), false);
+  assert.equal(isValidDeploymentId('AKfycbw.example.invalid'), false);
+  assert.equal(isValidDeploymentId('AKfycbw/example'), false);
+  assert.equal(isValidDeploymentId('https://script.google.com/macros/s/example/exec'), false);
+});
+
+test('rejects malformed, missing, duplicated, and non-canonical invitation parameters', () => {
   assert.equal(isCanonicalUuid('not-a-token'), false);
   assert.equal(isCanonicalUuid('{123e4567-e89b-42d3-a456-426614174000}'), false);
-  assert.equal(getInvitationToken('https://example.test/'), null);
-  assert.equal(getInvitationToken('https://example.test/?token='), null);
+  assert.equal(getInvitationParameters('https://example.test/'), null);
+  assert.equal(getInvitationParameters(`https://example.test/?token=${validToken}`), null);
+  assert.equal(getInvitationParameters(`https://example.test/?app=${validDeploymentId}`), null);
   assert.equal(
-    getInvitationToken(`https://example.test/?token=${validToken}&token=${validToken}`),
+    getInvitationParameters(
+      `https://example.test/?app=${validDeploymentId}&app=${validDeploymentId}&token=${validToken}`,
+    ),
+    null,
+  );
+  assert.equal(
+    getInvitationParameters(
+      `https://example.test/?app=${validDeploymentId}&token=${validToken}&token=${validToken}`,
+    ),
+    null,
+  );
+  assert.equal(
+    getInvitationParameters(
+      `https://example.test/?app=https%3A%2F%2Fevil.example%2Fexec&token=${validToken}`,
+    ),
+    null,
+  );
+  assert.equal(
+    getInvitationParameters(
+      `https://example.test/?app=${validDeploymentId}&token=${validToken}&returnUrl=https%3A%2F%2Fevil.example`,
+    ),
     null,
   );
 });
 
-test('builds a redirect that preserves only the validated token', () => {
-  const redirect = buildAppsScriptUrl(
-    'https://script.google.com/macros/s/example/exec?ignored=true#section',
-    validToken,
-  );
+test('builds a fixed Apps Script redirect using only the validated deployment ID and token', () => {
+  const redirect = buildAppsScriptUrl(validDeploymentId, validToken);
 
   assert.equal(
     redirect,
-    `https://script.google.com/macros/s/example/exec?token=${validToken}`,
+    `https://script.google.com/macros/s/${validDeploymentId}/exec?token=${validToken}`,
   );
+  assert.equal(new URL(redirect).searchParams.size, 1);
 });
 
-test('rejects unsafe or unconfigured redirect destinations', () => {
-  assert.match(APPS_SCRIPT_EXEC_URL, /^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/);
-  assert.throws(() => buildAppsScriptUrl('__APPS_SCRIPT_EXEC_URL__', validToken), /configurad/i);
-  assert.throws(() => buildAppsScriptUrl('http://example.test/exec', validToken), /HTTPS/i);
-  assert.throws(() => buildAppsScriptUrl('javascript:alert(1)', validToken), /HTTPS/i);
+test('rejects destination injection attempts instead of accepting a URL or host', () => {
   assert.throws(
-    () => buildAppsScriptUrl('https://script.google.com/macros/s/example/exec', 'bad-token'),
+    () => buildAppsScriptUrl('https://evil.example/macros/s/example/exec', validToken),
+    /deployment/i,
+  );
+  assert.throws(
+    () => buildAppsScriptUrl('script.google.com/macros/s/example/exec', validToken),
+    /deployment/i,
+  );
+  assert.throws(() => buildAppsScriptUrl('javascript:alert(1)', validToken), /deployment/i);
+  assert.throws(
+    () => buildAppsScriptUrl(validDeploymentId, 'bad-token'),
     /UUID/i,
   );
 });
@@ -84,6 +125,8 @@ test('contains no embedded guest PII or invitation UUID', async () => {
 
   assert.doesNotMatch(source, /Familia Invitada/i);
   assert.doesNotMatch(source, /\b[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\b/i);
+  assert.doesNotMatch(source, /AKfycbxEap7RJgkSd2prm1qCkzZGyRf4x-vaq30sJJ5aguqvhUPz1JD0A3IxyHZJm1By9i6f/);
+  assert.doesNotMatch(source, /APPS_SCRIPT_EXEC_URL/);
 });
 
 test('provides accessible progress and invalid-link states without exposing the token', async () => {
@@ -99,7 +142,7 @@ test('provides accessible progress and invalid-link states without exposing the 
     },
   };
   const invalidLocation = {
-    href: 'https://example.test/',
+    href: `https://example.test/?token=${validToken}`,
     replace() {
       assert.fail('An invalid invitation must not redirect.');
     },
@@ -111,23 +154,16 @@ test('provides accessible progress and invalid-link states without exposing the 
 
   let redirectedTo = null;
   const validLocation = {
-    href: `https://example.test/?token=${validToken}`,
+    href: `https://example.test/?app=${validDeploymentId}&token=${validToken}`,
     replace(url) {
       redirectedTo = url;
     },
   };
 
-  assert.equal(
-    startLanding(
-      documentObject,
-      validLocation,
-      'https://script.google.com/macros/s/example/exec',
-    ),
-    true,
-  );
+  assert.equal(startLanding(documentObject, validLocation), true);
   assert.equal(
     redirectedTo,
-    `https://script.google.com/macros/s/example/exec?token=${validToken}`,
+    `https://script.google.com/macros/s/${validDeploymentId}/exec?token=${validToken}`,
   );
 
   assert.match(html, /id="status"[^>]+role="status"[^>]+aria-live="polite"/i);
