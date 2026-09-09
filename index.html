@@ -2,78 +2,314 @@
 <html lang="es-MX">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="robots" content="noindex, nofollow">
-    <meta name="referrer" content="no-referrer">
-    <meta
-      http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'none'"
-    >
-
-    <title>Los XV de Scarlett Montserrath</title>
-    <meta
-      name="description"
-      content="Acompáñanos a celebrar sus XV años el 24 de octubre de 2026."
-    >
-
-    <meta property="og:type" content="website">
-    <meta property="og:locale" content="es_MX">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#6e4a50">
+    <meta name="description" content="Invitación a los XV años de Scarlett Montserrath — 24 de octubre de 2026.">
     <meta property="og:title" content="Los XV de Scarlett Montserrath">
-    <meta
-      property="og:description"
-      content="Acompáñanos a celebrar sus XV años el 24 de octubre de 2026."
-    >
-    <meta
-      property="og:image"
-      content="https://hgalvezb-sketch.github.io/scarlett-xv-2026/assets/whatsapp-preview.jpg"
-    >
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="Invitación para celebrar unos XV años en un jardín de rosas">
-    <meta property="og:url" content="https://hgalvezb-sketch.github.io/scarlett-xv-2026/">
-
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Los XV de Scarlett Montserrath">
-    <meta
-      name="twitter:description"
-      content="Acompáñanos a celebrar sus XV años el 24 de octubre de 2026."
-    >
-    <meta
-      name="twitter:image"
-      content="https://hgalvezb-sketch.github.io/scarlett-xv-2026/assets/whatsapp-preview.jpg"
-    >
-    <meta name="twitter:image:alt" content="Invitación para celebrar unos XV años en un jardín de rosas">
-
-    <link rel="stylesheet" href="./styles.css">
-    <script type="module" src="./landing.js"></script>
+    <meta property="og:description" content="Acompáñanos el sábado 24 de octubre de 2026.">
+    <meta property="og:type" content="website">
+    <!-- PUBLICACIÓN: añadir og:image con la URL HTTPS absoluta de assets/hero.webp. -->
+    <title>XV de Scarlett Montserrath</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <noscript><style>.opening-screen,main,.quick-actions,.review-ribbon{display:none!important}.no-script-message{display:grid!important}</style></noscript>
   </head>
-  <body>
-    <main class="landing" aria-labelledby="pageTitle">
-      <div class="monogram" aria-hidden="true">
-        <span>XV</span>
+  <body class="is-locked">
+    <a class="skip-link" href="#contenido" tabindex="-1">Saltar al contenido</a>
+
+    <div class="review-ribbon" id="reviewRibbon" role="status" hidden>Vista previa · revisa los datos marcados</div>
+
+    <section class="opening-screen" id="openingScreen" role="dialog" aria-modal="true" aria-labelledby="openingTitle" aria-busy="true" tabindex="-1">
+      <div class="opening-screen__backdrop" aria-hidden="true"></div>
+      <div class="opening-screen__veil" aria-hidden="true"></div>
+      <div class="opening-card">
+        <div class="monogram monogram--light" aria-hidden="true">SM</div>
+        <p class="eyebrow eyebrow--light">Mis XV años</p>
+        <div class="opening-title" id="openingTitle">Scarlett<br><span>Montserrath</span></div>
+        <div class="opening-date" aria-label="Sábado 24 de octubre de 2026">
+          <span>Sábado</span><strong>24</strong><span>Octubre · 2026</span>
+        </div>
+        <button class="button button--light" id="openInvitation" type="button" disabled aria-disabled="true">
+          <span>Abrir invitación</span>
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+        <p class="opening-hint">Toca para abrir con música</p>
       </div>
+    </section>
 
-      <p class="eyebrow">Invitación personal</p>
-      <h1 id="pageTitle">Los XV de<br><em>Scarlett Montserrath</em></h1>
-      <div class="ornament" aria-hidden="true"><span></span></div>
+    <section class="access-screen" id="invitationAccess" role="alert" aria-labelledby="accessTitle" tabindex="-1" hidden>
+      <div class="access-card">
+        <div class="monogram" aria-hidden="true">SM</div>
+        <p class="eyebrow">Acceso protegido</p>
+        <h2 id="accessTitle">Invitación no válida</h2>
+        <p id="accessMessage">Este enlace no contiene un pase válido. Solicita a la familia que vuelva a compartirte tu invitación personal.</p>
+      </div>
+    </section>
 
-      <section id="status" class="status" role="status" aria-live="polite" aria-atomic="true">
-        <span class="spinner" aria-hidden="true"></span>
-        <h2 id="statusTitle">Preparando tu invitación</h2>
-        <p id="statusMessage">En un momento podrás ver todos los detalles.</p>
+    <noscript>
+      <section class="no-script-message" role="alert">
+        <div class="access-card">
+          <h2>Activa JavaScript</h2>
+          <p>La invitación necesita JavaScript para validar el pase personal.</p>
+        </div>
+      </section>
+    </noscript>
+
+    <main id="contenido" tabindex="-1" inert>
+      <section class="hero" aria-labelledby="heroTitle">
+        <img class="hero__image" src="assets/hero.webp" alt="Scarlett con vestido rosa en un jardín de rosas" width="1400" height="1750" fetchpriority="high">
+        <div class="hero__scrim" aria-hidden="true"></div>
+        <div class="hero__content">
+          <p class="eyebrow eyebrow--light">Con la bendición de Dios</p>
+          <h1 id="heroTitle">Scarlett<br><span>Montserrath</span></h1>
+          <p class="hero__occasion">Celebra sus XV años</p>
+          <div class="date-lockup">
+            <span>Sáb</span><strong>24</strong><span>Oct · 2026</span>
+          </div>
+        </div>
+        <a class="hero__scroll" href="#bienvenida" aria-label="Continuar a la invitación">
+          <span>Descubre la invitación</span>
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+        </a>
       </section>
 
-      <p class="date">24 · Octubre · 2026</p>
+      <section class="section welcome" id="bienvenida" aria-labelledby="welcomeTitle">
+        <div class="botanical-mark" aria-hidden="true">
+          <svg viewBox="0 0 160 54"><path d="M9 45c37-3 45-30 70-34 22-4 42 11 72 0M60 26c-15-15-30-12-37-4 11 3 22 7 37 4Zm37-7c11-15 25-17 35-11-7 8-17 14-35 11Z"/></svg>
+        </div>
+        <p class="eyebrow">Una noche para recordar</p>
+        <h2 id="welcomeTitle">Hay momentos que soñamos toda la vida</h2>
+        <p class="lead">Hoy comienza un capítulo lleno de ilusión. Con enorme alegría quiero compartir contigo la celebración de mis quince años.</p>
+        <p class="script-note">Tu presencia hará este día aún más especial.</p>
+      </section>
 
-      <noscript>
-        <p class="noscript-message">
-          Activa JavaScript para abrir tu invitación. Si el problema continúa, solicita nuevamente tu enlace personal.
-        </p>
-      </noscript>
+      <section class="section parents" aria-labelledby="parentsTitle">
+        <div class="editorial-photo reveal">
+          <img src="assets/parents.webp" alt="Retrato de Scarlett sentada en un jardín" width="1400" height="1750" loading="lazy">
+          <span class="editorial-photo__number" aria-hidden="true">XV</span>
+        </div>
+        <div class="parents__content reveal">
+          <p class="eyebrow">Con el amor de</p>
+          <h2 id="parentsTitle">Mis padres</h2>
+          <p class="parent-name">Heriberto Gálvez Blanco</p>
+          <span class="ampersand" aria-hidden="true">&amp;</span>
+          <p class="parent-name">Gladys Clímaco Álvarez</p>
+          <div class="fine-rule" aria-hidden="true"></div>
+          <p>Quienes con amor y gratitud me acompañan en este momento tan esperado.</p>
+        </div>
+      </section>
 
-      <template id="invalidCopy">
-        <span>Enlace de invitación no válido</span>
-      </template>
+      <section class="section countdown-section" aria-labelledby="countdownTitle">
+        <div class="countdown-section__image" aria-hidden="true"></div>
+        <div class="countdown-section__overlay" aria-hidden="true"></div>
+        <div class="countdown-section__content reveal">
+          <p class="eyebrow eyebrow--light">Falta muy poco</p>
+          <h2 id="countdownTitle">La cuenta regresiva comenzó</h2>
+          <div class="countdown" id="countdown" role="timer" aria-label="Tiempo restante para el evento">
+            <div><strong data-countdown="days">00</strong><span>Días</span></div>
+            <div><strong data-countdown="hours">00</strong><span>Horas</span></div>
+            <div><strong data-countdown="minutes">00</strong><span>Minutos</span></div>
+            <div><strong data-countdown="seconds">00</strong><span>Segundos</span></div>
+          </div>
+          <p class="countdown-date">Sábado · 24 de octubre · 2026</p>
+        </div>
+      </section>
+
+      <section class="section venue" id="ubicacion" aria-labelledby="venueTitle">
+        <div class="section-heading reveal">
+          <p class="eyebrow">Dónde y cuándo</p>
+          <h2 id="venueTitle">Nuestra celebración</h2>
+        </div>
+        <article class="venue-card reveal">
+          <div class="venue-card__image-wrap">
+            <img src="assets/salon-mayyo.webp" alt="Fachada del Salón de Eventos Mayyo" width="1768" height="890" loading="lazy">
+            <span class="venue-card__time">6:00 p. m.</span>
+          </div>
+          <div class="venue-card__content">
+            <svg class="section-icon" aria-hidden="true" viewBox="0 0 48 48"><path d="M24 43s14-12 14-25a14 14 0 1 0-28 0c0 13 14 25 14 25Z"/><circle cx="24" cy="18" r="5"/></svg>
+            <h3>Salón de Eventos Mayyo</h3>
+            <p>Calle 5 de Febrero, Nandambua 2a. Sección, C.P. 29160, Chiapa de Corzo, Chiapas.</p>
+            <a class="button button--primary map-link" href="https://www.google.com/maps/search/?api=1&amp;query=Salon%20de%20Eventos%20Mayyo%2C%205%20de%20Febrero%2C%20Nandambua%202a.%20Seccion%2C%2029160%2C%20Chiapa%20de%20Corzo%2C%20Chiapas" target="_blank" rel="noopener noreferrer">
+              <span>Cómo llegar</span>
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+            <p class="review-note">Pin exacto de Google Maps pendiente de confirmación.</p>
+          </div>
+        </article>
+      </section>
+
+      <section class="section film" aria-labelledby="filmTitle">
+        <div class="film__copy reveal">
+          <p class="eyebrow">Mi historia</p>
+          <h2 id="filmTitle">Un sueño que comienza</h2>
+          <p>Quiero que seas parte de esta noche, de sus sonrisas y de cada recuerdo que construiremos juntos.</p>
+        </div>
+        <div class="phone-frame reveal">
+          <video controls preload="metadata" playsinline poster="assets/countdown.webp" aria-label="Video de invitación de Scarlett">
+            <source src="assets/scarlett-event-details.mp4" type="video/mp4">
+            Tu navegador no puede reproducir este video.
+          </video>
+        </div>
+      </section>
+
+      <section class="section gallery" aria-labelledby="galleryTitle">
+        <div class="section-heading reveal">
+          <p class="eyebrow">Retratos</p>
+          <h2 id="galleryTitle">Instantes de Scarlett</h2>
+        </div>
+        <div class="gallery-grid">
+          <button class="gallery-item gallery-item--tall reveal" type="button" data-gallery-src="assets/scarlett-01.webp" aria-label="Ampliar retrato 1">
+            <img src="assets/scarlett-01.webp" alt="Scarlett de pie junto a rosas" width="1120" height="1400" loading="lazy">
+          </button>
+          <button class="gallery-item reveal" type="button" data-gallery-src="assets/scarlett-02.webp" aria-label="Ampliar retrato 2">
+            <img src="assets/scarlett-02.webp" alt="Scarlett en un sendero del jardín" width="1120" height="1400" loading="lazy">
+          </button>
+          <button class="gallery-item reveal" type="button" data-gallery-src="assets/scarlett-04.webp" aria-label="Ampliar retrato 3">
+            <img src="assets/scarlett-04.webp" alt="Scarlett rodeada de un arco de rosas" width="1120" height="1400" loading="lazy">
+          </button>
+          <button class="gallery-item gallery-item--wide reveal" type="button" data-gallery-src="assets/scarlett-08.webp" aria-label="Ampliar retrato 4">
+            <img src="assets/scarlett-08.webp" alt="Retrato de Scarlett con luz dorada" width="1120" height="1400" loading="lazy">
+          </button>
+        </div>
+      </section>
+
+      <section class="section program" aria-labelledby="programTitle">
+        <div class="section-heading reveal">
+          <p class="eyebrow">Programa</p>
+          <h2 id="programTitle">Momentos de la noche</h2>
+          <p>Estos son los momentos especiales de la noche.</p>
+        </div>
+        <ol class="timeline">
+          <li class="timeline__item reveal">
+            <span class="timeline__time">6:00 p. m.</span>
+            <div><h3>Recepción</h3><p>Bienvenida a nuestros invitados.</p></div>
+          </li>
+          <li class="timeline__item reveal">
+            <span class="timeline__time">6:30 p. m.</span>
+            <div><h3>Vals</h3><p>Un momento especial para compartir.</p></div>
+          </li>
+          <li class="timeline__item reveal">
+            <span class="timeline__time">7:40 p. m.</span>
+            <div><h3>Brindis</h3><p>Levantemos nuestras copas por Scarlett.</p></div>
+          </li>
+          <li class="timeline__item reveal">
+            <span class="timeline__time">8:00 p. m.</span>
+            <div><h3>Cena</h3><p>Disfrutemos juntos de la velada.</p></div>
+          </li>
+        </ol>
+      </section>
+
+      <section class="section dress" aria-labelledby="dressTitle">
+        <div class="dress__photo reveal">
+          <img src="assets/dress.webp" alt="Scarlett con vestido rosa y ramo de flores" width="1400" height="1750" loading="lazy">
+        </div>
+        <div class="dress__content reveal">
+          <svg class="section-icon" aria-hidden="true" viewBox="0 0 48 48"><path d="M18 6h12l2 9 8 6-6 8-4-3v16H18V26l-4 3-6-8 8-6 2-9Z"/></svg>
+          <p class="eyebrow">Código de vestimenta</p>
+          <h2 id="dressTitle">Formal</h2>
+          <p>El color rosa queda reservado con cariño para la quinceañera.</p>
+          <div class="reserved-color" aria-label="Color rosa reservado">
+            <span aria-hidden="true"></span><strong>Rosa reservado</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="section gifts" aria-labelledby="giftsTitle">
+        <div class="gifts__ornament" aria-hidden="true">S</div>
+        <p class="eyebrow">Detalles</p>
+        <h2 id="giftsTitle">Lluvia de sobres</h2>
+        <p class="lead">Tu presencia es el mejor regalo. Si deseas tener un detalle conmigo, tendremos un espacio para recibir sobres el día del evento.</p>
+      </section>
+
+      <section class="section song" aria-labelledby="songTitle">
+        <div class="song-card reveal">
+          <div class="song-card__disc" aria-hidden="true"><span>XV</span></div>
+          <div>
+            <p class="eyebrow">Nuestra canción</p>
+            <h2 id="songTitle">Compartir</h2>
+            <p>Carla Morrison</p>
+          </div>
+          <audio id="backgroundMusic" src="assets/compartir-carla-morrison.mp3" preload="auto" loop hidden aria-hidden="true"></audio>
+          <p class="music-fallback" id="musicAutoplayFallback" role="status" aria-live="polite" hidden>
+            Tu navegador bloqueó la música de fondo. Activa el sonido del teléfono y vuelve a abrir la invitación.
+          </p>
+        </div>
+        <p class="song__legal">Música de fondo: “Compartir” · Carla Morrison.</p>
+      </section>
+
+      <section class="section pass" id="pase" aria-labelledby="passTitle" data-personalized-section hidden inert>
+        <div class="pass-card reveal">
+          <div class="pass-card__head">
+            <div class="monogram" aria-hidden="true">SM</div>
+            <p>Invitación personal</p>
+          </div>
+          <h2 id="passTitle">Pase válido para</h2>
+          <p class="pass-card__guest" data-guest-name>Familia invitada</p>
+          <div class="pass-card__count">
+            <strong data-pass-count>4</strong>
+            <span data-pass-label>pases</span>
+          </div>
+          <div class="guest-qr-frame">
+            <div class="guest-qr" id="guestQr" role="img" aria-label="Código QR personal pendiente de validación">
+              <span class="guest-qr__loading" aria-hidden="true">SM</span>
+            </div>
+            <small class="guest-qr__caption">QR personal de esta invitación</small>
+          </div>
+          <p class="pass-card__note">Presenta este pase digital en la entrada. El enlace final será único para cada familia.</p>
+        </div>
+      </section>
+
+      <section class="section rsvp" id="confirmacion" aria-labelledby="rsvpTitle" data-personalized-section hidden inert>
+        <div class="section-heading reveal">
+          <p class="eyebrow">Reserva la fecha</p>
+          <h2 id="rsvpTitle">Confirma tu asistencia</h2>
+          <p>Tu respuesta quedará asociada únicamente a tu pase personal.</p>
+        </div>
+        <form class="rsvp-form reveal" id="rsvpForm" novalidate>
+          <fieldset>
+            <legend>¿Podrás acompañarnos?</legend>
+            <label class="choice"><input type="radio" name="attendance" value="yes" required><span>Sí, asistiré</span></label>
+            <label class="choice"><input type="radio" name="attendance" value="no" required><span>No podré asistir</span></label>
+          </fieldset>
+          <label for="confirmedCount">Número de asistentes</label>
+          <input id="confirmedCount" name="confirmedCount" type="number" min="0" max="4" value="1" inputmode="numeric" required>
+          <label for="wishMessage">Mensaje para Scarlett <span>(opcional)</span></label>
+          <textarea id="wishMessage" name="wishMessage" rows="4" maxlength="300" placeholder="Escribe aquí tus buenos deseos..."></textarea>
+          <button class="button button--primary button--full" type="submit">Enviar confirmación</button>
+          <p class="form-status" id="formStatus" aria-live="polite"></p>
+        </form>
+      </section>
+
+      <footer class="footer">
+        <div class="monogram monogram--light" aria-hidden="true">SM</div>
+        <p class="footer__name">Scarlett Montserrath<br>Gálvez Climaco</p>
+        <p>24 · 10 · 2026</p>
+        <div class="fine-rule fine-rule--light" aria-hidden="true"></div>
+        <p class="footer__note">Gracias por ser parte de esta historia.</p>
+      </footer>
     </main>
+
+    <nav class="quick-actions" aria-label="Acciones rápidas" inert>
+      <a href="#ubicacion" aria-label="Ver ubicación">
+        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 22s7-6 7-13a7 7 0 1 0-14 0c0 7 7 13 7 13Z"/><circle cx="12" cy="9" r="2.5"/></svg><span>Ubicación</span>
+      </a>
+      <a href="#pase" aria-label="Ver pase" data-personalized-link hidden>
+        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 6h16v12H4V6Zm3 3h4v4H7V9Zm7 0h3m-3 4h3"/></svg><span>Mi pase</span>
+      </a>
+      <a href="#confirmacion" aria-label="Confirmar asistencia" data-personalized-link hidden>
+        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg><span>Confirmar</span>
+      </a>
+    </nav>
+
+    <dialog class="lightbox" id="lightbox" aria-label="Fotografía ampliada">
+      <button class="lightbox__close" type="button" aria-label="Cerrar fotografía">×</button>
+      <img src="assets/hero.webp" alt="Retrato ampliado de Scarlett">
+    </dialog>
+
+    <script src="src/invitation-core.js"></script>
+    <script src="src/qr-code.js"></script>
+    <script src="app.js"></script>
   </body>
 </html>

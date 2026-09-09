@@ -1,0 +1,54 @@
+SCARLETT MONTSERRATH — ASSET MANIFEST
+Generated: 2026-08-20
+
+Packaging note
+- This manifest documents the complete working asset set.
+- The lightweight portable ZIP includes WebP, JPEG, MP4, MP3 and this manifest.
+- PNG masters and the originals/ folder remain in the working project and are intentionally excluded from the portable ZIP.
+
+Web-ready images (WebP, metadata stripped, quality 82; portraits limited to 1400 px long edge)
+Filename             Dimensions   Size       Recommended usage
+hero.webp             1120x1400    164.0 KiB  Main cover / opening portrait (alias of scarlett-06.webp)
+parents.webp          1120x1400    184.8 KiB  Parents and family section (alias of scarlett-03.webp)
+location.webp         1120x1400    136.8 KiB  Venue/location section (alias of scarlett-02.webp)
+dress.webp            1120x1400    171.9 KiB  Dress code section (alias of scarlett-07.webp)
+countdown.webp        1120x1400    163.4 KiB  Date/countdown section (alias of scarlett-09.webp)
+scarlett-01.webp      1120x1400    186.3 KiB  Full-length garden portrait; gallery
+scarlett-02.webp      1120x1400    136.8 KiB  Full-length path portrait; gallery/location
+scarlett-03.webp      1120x1400    184.8 KiB  Seated portrait; family/parents
+scarlett-04.webp      1120x1400    214.9 KiB  Rose-arch portrait; gallery highlight
+scarlett-05.webp      1120x1400    219.4 KiB  Seated close portrait; message/quote
+scarlett-06.webp      1120x1400    164.0 KiB  Half-length rose garden portrait; hero
+scarlett-07.webp      1120x1400    171.9 KiB  Bouquet portrait; dress code
+scarlett-08.webp      1120x1400    156.0 KiB  Formal garden portrait; event details
+scarlett-09.webp      1120x1400    163.4 KiB  Golden-hour full portrait; countdown
+salon-mayyo.webp      1767x890     222.7 KiB  Venue card/background; web preferred
+salon-mayyo.png       1767x890   2,326.6 KiB  Edited venue master; print/high-resolution fallback
+
+Original portrait copies (byte-for-byte copies; sources remain untouched)
+Filename                              Dimensions   Size
+originals/scarlett-01-source.png      1122x1402  2,400.9 KiB  Source image (1)
+originals/scarlett-02-source.png      1122x1402  2,207.3 KiB  Source image (2)
+originals/scarlett-03-source.png      1122x1402  2,412.3 KiB  Source image (4)
+originals/scarlett-04-source.png      1122x1402  2,552.7 KiB  Source image (5)
+originals/scarlett-05-source.png      1122x1402  2,572.2 KiB  Source image (6)
+originals/scarlett-06-source.png      1122x1402  2,341.7 KiB  Source image (7)
+originals/scarlett-07-source.png      1122x1402  2,368.5 KiB  Source image (8)
+originals/scarlett-08-source.png      1122x1402  2,294.9 KiB  Source image (9)
+originals/scarlett-09-source.png      1122x1402  2,346.5 KiB  Source image (10)
+originals/salon-mayyo-source.png      1767x890   2,326.6 KiB  Edited venue master backup
+
+Video
+Filename                         Dimensions   Size       Duration    Codec  Recommended usage
+scarlett-event-details.mp4       478x850      2,103.5 KiB 40.666 s    H.264  Optional vertical event-details section; lazy-load
+
+Audio
+Filename                         Size         Duration    Codec  Bitrate   Recommended usage
+compartir-carla-morrison.mp3     4,115.4 KiB  263.376 s   MP3    128 kbps  Looping background music after opening gesture
+
+Verification
+- 9 portrait originals copied and SHA-256 matched to their supplied sources.
+- Venue PNG and MP4 copied and SHA-256 matched to their supplied sources.
+- Background MP3 copied byte-for-byte and SHA-256 matched to the supplied file.
+- 9 portrait WebP files decode successfully at 1120x1400.
+- Use WebP files in the invitation; keep originals only as non-web masters.
